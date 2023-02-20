@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,macos
 
 criteria/
-
+.env
 ### macOS ###
 # General
 .DS_Store
