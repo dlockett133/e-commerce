@@ -11,8 +11,8 @@ router.get('/', async (req, res) => {
     const productsData = await Product.findAll({include: [{model: Category, model: Tag}]});
     res.status(200).json(productsData)
   } catch (error) {
-    console.log(error)
-    res.status(500).json({message: err.message});
+      console.log(error)
+      res.status(500).json({message: err.message});
   }
   
 });
@@ -32,11 +32,12 @@ router.get('/:id', async (req, res) => {
       res.status(404).json({
         message:`Product not found with an id of ${id}`
       });
+      return
     }
     res.status(200).json(product);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({message: error.message})
+      console.log(error);
+      res.status(500).json({message: error.message});
   }
   
 
@@ -123,12 +124,13 @@ router.delete('/:id', async (req, res) => {
     const product = await Product.destroy({where: {id}})
     if(!product){
       console.log(`Product not found with an id of ${id}`)
-      res.status(404).json({message:`Product not found with an id of ${id}`})
+      res.status(404).json({message:`Product not found with an id of ${id}`});
+      return
     }
     res.status(200).json({ message: `Product with id ${id} has been deleted.` })
   } catch (error) {
-    console.log(error);
-    res.status(500).json({message: `Server Error`})
+      console.log(error);
+      res.status(500).json({message: `Server Error`});
   }
 });
 
