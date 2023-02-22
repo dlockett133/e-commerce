@@ -9,10 +9,10 @@ router.get('/', async (req, res) => {
   // be sure to include its associated Category and Tag data
   try {
     const productsData = await new Product.findAll({include: [{model: Category, model: Tag}]});
-    res.statusCode(200)
+    res.status(200).json(productsData)
   } catch (error) {
     console.log(error)
-    res.statusCode(500).json({message: 'Sever Error'});
+    res.status(500).json({message: err.message});
   }
   
 });
@@ -29,12 +29,14 @@ router.get('/:id', async (req, res) => {
     });
     if(!product){
       console.log('Product not found');
-      res.statusCode(404).json(`Product not found with an id of ${id}`);
+      res.status(404).json({
+        message:`Product not found with an id of ${id}`
+      });
     }
-    res.statusCode(200);
+    res.status(200).json(product);
   } catch (error) {
     console.log(error);
-    res.statusCode(500).json({message: 'Server Error'})
+    res.status(500).json({message: error.message})
   }
   
 
@@ -63,7 +65,7 @@ router.post('/', (req, res) => {
         return ProductTag.bulkCreate(productTagIdArr);
       }
       // if no product tags, just respond
-      res.status(200).json(product);
+      res.status(201).json(product);
     })
     .then((productTagIds) => res.status(200).json(productTagIds))
     .catch((err) => {
@@ -121,12 +123,12 @@ router.delete('/:id', async (req, res) => {
     const product = await new Product.destroy({where: {id}})
     if(!product){
       console.log(`Product not found with an id of ${id}`)
-      res.statusCode(404).json({message:`Product not found with an id of ${id}`})
+      res.status(404).json({message:`Product not found with an id of ${id}`})
     }
-    res.statusCode(200)
+    res.status(200).json({ message: `Product with id ${id} has been deleted.` })
   } catch (error) {
     console.log(error);
-    res.statusCode(500).json({message: `Server Error`})
+    res.status(500).json({message: `Server Error`})
   }
 });
 
