@@ -8,20 +8,36 @@ router.get('/', async (req, res) => {
   // find all products
   // be sure to include its associated Category and Tag data
   try {
-    const productsData = await new Product.findAll({include: [Category, Tag]});
+    const productsData = await new Product.findAll({include: [{model: Category, model: Tag}]});
     res.statusCode(200)
   } catch (error) {
     console.log(error)
     res.statusCode(500).json({message: 'Sever Error'});
   }
   
-  
 });
 
 // get one product
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
+  const {id} = req.params;
+  try {
+    const product = await new Product.findOne({
+      where: {id},
+      include: [{model: Category, model: Tag}]
+    });
+    if(!product){
+      console.log('Product not found');
+      res.statusCode(404).json(`Product not found with an id of ${id}`);
+    }
+    res.statusCode(200);
+  } catch (error) {
+    console.log(error);
+    res.statusCode(500).json({message: 'Server Error'})
+  }
+  
+
 });
 
 // create new product
