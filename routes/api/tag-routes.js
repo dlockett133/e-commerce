@@ -19,9 +19,25 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   // find a single tag by its `id`
   // be sure to include its associated Product data
+  const {id} = req.params;
+  try {
+    const tag = await Tag.findOne({
+      where: {id},
+      include: [{model: Product}]
+    })
+
+    if(!tag){
+      console.log(`Can't find tag with an id of ${id}`);
+      res.status(404).json({message: `Can't find tag with an id of ${id}`})
+    }
+    res.status(200).json(tag);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message: error.message})
+  }
 });
 
 router.post('/', (req, res) => {
