@@ -31,8 +31,8 @@ router.get('/:id', async (req, res) => {
     })
 
     if(!tag){
-      console.log(`Can't find tag with an id of ${id}`);
-      res.status(404).json({message: `Can't find tag with an id of ${id}`});
+      console.log(`Can't find a tag with an id of ${id}`);
+      res.status(404).json({message: `Can't find a tag with an id of ${id}`});
       return
     }
     res.status(200).json(tag);
